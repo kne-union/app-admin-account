@@ -1,5 +1,5 @@
 const {CracoRemoteComponentsPlugin} = require("@kne/modules-dev");
-const aliasConfig = require("./webstorm.webpack.config.cjs");
+const aliasConfig = require("./webstorm.webpack.config");
 
 process.env.CI = false;
 

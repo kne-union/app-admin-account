@@ -1,0 +1,75 @@
+{
+  "name": "@kne-components/app-admin-account",
+  "version": "1.0.0-alpha.0",
+  "description": "fastify的用户管理账号等实现",
+  "scripts": {
+    "init": "husky",
+    "start": "cross-env PORT=3001 COMPONENTS_NAME=components-account MODULES_DEV_PUBLIC_URL=/ craco start",
+    "build:md": "npx @kne/md-doc",
+    "start:md": "npx @kne/md-doc --watch",
+    "create": "modules-dev-create",
+    "prettier": "prettier --config .prettierrc --write '{libs/**/*,index}.{js,jsx,ts,tsx,json,css,scss}'",
+    "lint-staged": "npx lint-staged"
+  },
+  "files": [
+    "index.js",
+    "libs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kne-union/app-account.git"
+  },
+  "keywords": [],
+  "author": "linzp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kne-union/app-account/issues"
+  },
+  "homepage": "https://github.com/kne-union/app-account#readme",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@common/(.*)": "<rootDir>/src/common/$1",
+      "^@components/(.*)": "<rootDir>/src/components/$1",
+      "^@utils/(.*)": "<rootDir>/src/common/utils/$1"
+    }
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "husky": "^9.0.11",
+    "js-cookie": "^3.0.5",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "@kne/modules-dev": "^2.1.2",
+    "@loadable/component": "^5.16.4",
+    "@kne/react-fetch": "^1.5.5",
+    "@kne/remote-loader": "^1.2.3",
+    "antd": "^5.22.4",
+    "axios": "^1.7.9",
+    "classnames": "^2.5.1",
+    "dayjs": "^1.11.13",
+    "lodash-es": "^4.17.21",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "^6.28.0"
+  }
+}

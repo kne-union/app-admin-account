@@ -3,7 +3,7 @@ import sequelize from '@kne/fastify-sequelize';
 import dataFormat from '@kne/fastify-response-data-format';
 import fp from 'fastify-plugin';
 import qs from 'qs';
-import admin from '../server/index.js';
+import admin from '../index.js';
 import fastifyEnv from '@fastify/env';
 
 
