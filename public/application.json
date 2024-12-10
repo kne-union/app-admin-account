@@ -1,0 +1,43 @@
+{
+  "title": "账号管理",
+  "description": "用于实现一套账号管理，租户管理，组织管理，权限管理等管理后台的基础功能",
+  "ui-config": {
+    "remote": "components-admin-account"
+  },
+  "dependencies": [
+    "fastify-sequelize"
+  ],
+  "registry": {
+    "defaultAccountType": {
+      "type": "string",
+      "title": "默认账号类型",
+      "default": "Email",
+      "description": "Phone:手机号,Email:邮箱"
+    },
+    "allowRegistry": {
+      "type": "boolean",
+      "title": "是否允许注册",
+      "default": true,
+      "description": "如果不允许注册，则只能通过管理员开通账号"
+    }
+  },
+  "permissions": {
+    "SETTING": {
+      "title": "设置",
+      "isModule": true,
+      "required": true
+    },
+    "USER": {
+      "title": "用户设置",
+      "isModule": false,
+      "required": false,
+      "parent": "SETTING"
+    },
+    "ROLE": {
+      "title": "角色",
+      "isModule": false,
+      "required": false,
+      "parent": "SETTING"
+    }
+  }
+}
