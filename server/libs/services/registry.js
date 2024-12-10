@@ -3,8 +3,8 @@ import appInfo from "../appInfo.js";
 import {transform} from 'lodash-es';
 
 const registryService = fp(async (fastify, options) => {
-    const {models, services, global} = fastify[appInfo.name];
-    const systemRegistry = transform(global.applications, (result, application, key) => {
+    const {models, services} = fastify[appInfo.name];
+    const systemRegistry = transform(fastify.namespace.applications, (result, application, key) => {
         result[key] = application.registry;
     }, {});
 

@@ -21,6 +21,16 @@ const md5 = value => {
 
 const userService = fp(async (fastify, options) => {
     const {models, services} = fastify[appInfo.name];
+
+    const getUserInfo = async () => {
+    };
+
+    const registry = async () => {
+    };
+
+    const login = async () => {
+    };
+
     services.user = {userNameIsEmail, generateRandom6DigitNumber, md5};
 });
 
