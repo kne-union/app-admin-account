@@ -3,23 +3,16 @@
   "version": "1.0.0-alpha.0",
   "description": "fastify的用户管理账号等实现",
   "main": "server/index.js",
-  "type": "module",
   "scripts": {
     "init": "husky",
+    "start": "run-p start:ui start:server",
     "start:server": "nodemon ./devServer/index.js",
+    "start:ui": "cross-env PORT=3001 COMPONENTS_NAME=components-account MODULES_DEV_PUBLIC_URL=/ craco start",
     "build:md": "npx @kne/md-doc",
     "start:md": "npx @kne/md-doc --watch",
+    "create": "modules-dev-create",
     "prettier": "prettier --config .prettierrc --write '{libs/**/*,index}.{js,jsx,ts,tsx,json,css,scss}'",
     "lint-staged": "npx lint-staged"
-  },
-  "lint-staged": {
-    "{libs/**/*,index}.{js,jsx,ts,tsx,json,css,scss}": [
-      "prettier --config .prettierrc --write",
-      "git add"
-    ],
-    "README.md": [
-      "git add"
-    ]
   },
   "files": [
     "index.js",
@@ -36,24 +29,71 @@
     "url": "https://github.com/kne-union/app-account/issues"
   },
   "homepage": "https://github.com/kne-union/app-account#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "{src/**/*,server/**/*}.{js,jsx,ts,tsx,json,css,scss}": [
+      "prettier --config .prettierrc --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@common/(.*)": "<rootDir>/src/common/$1",
+      "^@components/(.*)": "<rootDir>/src/components/$1",
+      "^@utils/(.*)": "<rootDir>/src/common/utils/$1"
+    }
+  },
   "devDependencies": {
     "@fastify/env": "^5.0.1",
-    "@fastify/swagger": "^8.14.0",
-    "@kne/fastify-file-manager": "^1.1.2",
     "@kne/fastify-response-data-format": "^0.1.3",
     "@kne/fastify-sequelize": "^3.0.0-alpha.3",
+    "@kne/modules-dev": "^2.1.2",
+    "@loadable/component": "^5.16.4",
+    "classnames": "^2.5.1",
+    "cross-env": "^7.0.3",
     "fastify": "^5.1.0",
     "husky": "^9.0.11",
+    "js-cookie": "^3.0.5",
     "mysql2": "^3.11.5",
     "nodemon": "^3.1.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.2.5",
     "qs": "^6.12.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "^6.28.0",
     "sqlite3": "^5.1.7",
     "widdershins": "^4.0.1"
   },
   "dependencies": {
     "@fastify/jwt": "^9.0.1",
     "@kne/fastify-namespace": "^1.0.3",
+    "@kne/react-fetch": "^1.5.5",
+    "@kne/remote-loader": "^1.2.3",
+    "antd": "^5.22.4",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.13",
     "fastify-plugin": "^5.0.1",
