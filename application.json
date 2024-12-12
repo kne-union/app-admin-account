@@ -1,4 +1,6 @@
 {
+  "name": "adminAccount",
+  "version": "1.0.0",
   "title": "账号管理",
   "description": "用于实现一套账号管理，租户管理，组织管理，权限管理等管理后台的基础功能",
   "ui-config": {

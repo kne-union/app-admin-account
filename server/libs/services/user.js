@@ -1,37 +1,66 @@
 import fp from 'fastify-plugin';
 import dayjs from 'dayjs';
 import bcryptjs from 'bcryptjs';
+import {pick, get} from 'lodash-es';
+import httpErrors from 'http-errors';
 import crypto from 'node:crypto';
 import appInfo from '../appInfo.js';
 
-const generateRandom6DigitNumber = () => {
-    const randomNumber = Math.random() * 1000000;
-    return Math.floor(randomNumber).toString().padStart(6, '0');
-}
-
-const userNameIsEmail = (username) => {
-    return /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(username);
-}
-
-const md5 = value => {
-    const hash = crypto.createHash('md5');
-    hash.update(value);
-    return hash.digest('hex');
-};
+const {Unauthorized} = httpErrors;
 
 const userService = fp(async (fastify, options) => {
     const {models, services} = fastify[appInfo.name];
 
-    const getUserInfo = async () => {
+    const getUserInfo = async (authenticatePayload) => {
+        if (!(authenticatePayload && authenticatePayload.id)) {
+            throw new Unauthorized();
+        }
+        const user = await models.user.findOne({
+            where: {
+                uuid: authenticatePayload.id
+            }
+        });
+        if (!user) {
+            throw new Unauthorized();
+        }
+        return Object.assign({}, pick(user, ['avatar', 'nickname', 'phone', 'email', 'gender', 'status', 'birthday', 'description', 'currentTenantId']), {
+            id: user.uuid
+        });
     };
 
-    const registry = async () => {
+    const accountIsExists = async ({email, phone}, currentUser) => {
+        const query = [];
+        if (email && email !== get(currentUser, 'email')) {
+            query.push({email});
+        }
+        if (phone && phone !== get(currentUser, 'phone')) {
+            query.push({phone});
+        }
+
+        return (await models.user.count({
+            where: {
+                [fastify.sequelize.Sequelize.Op.or]: query
+            }
+        })) > 0;
     };
 
-    const login = async () => {
+    const addUser = async ({avatar, nickname, gender, birthday, description, phone, email, password, status}) => {
+        if ((await accountIsExists({phone, email})) > 0) {
+            throw new Error('手机号或者邮箱都不能重复');
+        }
+        if (!password) {
+            throw new Error('密码不能为空');
+        }
+        const account = await models.userAccount.create(await services.account.passwordEncryption(password));
+        const user = await models.user.create({
+            avatar, nickname, gender, birthday, description, phone, email, status, userAccountId: account.uuid
+        });
+        await account.update({belongToUserId: user.uuid});
+
+        return Object.assign({}, user.get({pain: true}), {id: user.uuid});
     };
 
-    services.user = {userNameIsEmail, generateRandom6DigitNumber, md5};
+    services.user = {getUserInfo, addUser, accountIsExists};
 });
 
 export default userService;

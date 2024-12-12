@@ -4,6 +4,7 @@ import {Spin, Empty, message} from 'antd';
 import axios from 'axios';
 import {preset as remoteLoaderPreset, loadModule} from '@kne/remote-loader';
 import {getCookies} from '@common/cookies';
+import {APP_NAME} from '@common/systemConstant';
 
 if (window.runtimePublicUrl) {
     window.PUBLIC_URL = window.runtimePublicUrl;
@@ -12,7 +13,7 @@ if (window.runtimePublicUrl) {
 }
 
 export const ajax = (() => {
-    const instance = axios.default.create({
+    const instance = axios.create({
         validateStatus: function () {
             return true;
         }
@@ -52,18 +53,14 @@ export const ajax = (() => {
     return instance;
 })();
 
-const remoteUrl = 'https://uc.fatalent.cn',
-    remoteTpl = '{{url}}/packages/@kne-components/{{remote}}/{{version}}/build';
+const remoteUrl = 'https://uc.fatalent.cn', remoteTpl = '{{url}}/packages/@kne-components/{{remote}}/{{version}}/build';
 
 const registry = {
-    url: remoteUrl,
-    tpl: remoteTpl,
+    url: remoteUrl, tpl: remoteTpl,
 };
 
 const componentsCoreRemote = {
-    ...registry,
-    remote: 'components-core',
-    defaultVersion: '0.2.77'
+    ...registry, remote: 'components-core', defaultVersion: '0.2.77'
 };
 export const globalInit = async () => {
     fetchPreset({
@@ -83,9 +80,7 @@ export const globalInit = async () => {
 
     const remoteComponentsLoader = {
         'components-iconfont': {
-            ...registry,
-            remote: 'components-iconfont',
-            defaultVersion: '0.1.8'
+            ...registry, remote: 'components-iconfont', defaultVersion: '0.1.8'
         },
     };
 
@@ -106,9 +101,10 @@ export const globalInit = async () => {
     const ajaxPostForm = (url, data, options) => {
         return axios.postForm(url, data, options);
     };
+
     return {
         ajax: request, ajaxPostForm, apis: Object.assign({}, {
-            account: getApis(), file: {
+            [APP_NAME]: getApis(), file: {
                 upload: ({file}) => {
                     return ajaxPostForm('/api/static/upload', {file});
                 }, getUrl: {

@@ -32,7 +32,7 @@ export const UserInfo = createWithRemoteLoader({
     const [SetGlobal, usePreset] = remoteModules;
     const {apis} = usePreset();
     return (<Fetch
-        {...Object.assign({}, apis.account.getUserInfo)}
+        {...Object.assign({}, apis.adminAccount.account.getUserInfo)}
         render={({data}) => {
             return (<CheckAccountIsInit baseUrl={baseUrl} data={data}>
                 <SetGlobal globalKey="userInfo" value={data} needReady>

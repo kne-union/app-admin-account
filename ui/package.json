@@ -59,15 +59,17 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.2",
     "@kne/modules-dev": "^2.1.2",
-    "@loadable/component": "^5.16.4",
     "@kne/react-fetch": "^1.5.5",
     "@kne/remote-loader": "^1.2.3",
+    "@loadable/component": "^5.16.4",
     "antd": "^5.22.4",
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
     "lodash-es": "^4.17.21",
+    "md5": "^2.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.28.0"

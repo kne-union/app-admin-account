@@ -1,14 +1,48 @@
 {
-  "isFull": false,
+  "isFull": true,
   "list": [
     {
-      "title": "这里填写示例标题",
-      "description": "这里填写示例说明",
-      "code": "./base.js",
+      "title": "Login",
+      "description": "登录",
+      "code": "./login.js",
       "scope": [
         {
           "name": "_Account",
           "packageName": "@components/Account"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        }
+      ]
+    },
+    {
+      "title": "Register",
+      "description": "注册",
+      "code": "./register.js",
+      "scope": [
+        {
+          "name": "_Account",
+          "packageName": "@components/Account"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        }
+      ]
+    },
+    {
+      "title": "Tenant",
+      "description": "租户选择",
+      "code": "./tenant.js",
+      "scope": [
+        {
+          "name": "_Account",
+          "packageName": "@components/Account"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
         }
       ]
     }

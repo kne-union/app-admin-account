@@ -1,0 +1,24 @@
+{
+  "isFull": false,
+  "list": [
+    {
+      "title": "VerificationCodeButton",
+      "description": "发送验证码",
+      "code": "./base.js",
+      "scope": [
+        {
+          "name": "_VerificationCodeButton",
+          "packageName": "@components/VerificationCodeButton"
+        },
+        {
+          "name": "remoteLoader",
+          "packageName": "@kne/remote-loader"
+        },
+        {
+          "name": "antd",
+          "packageName": "antd"
+        }
+      ]
+    }
+  ]
+}
