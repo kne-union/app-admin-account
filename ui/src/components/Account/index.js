@@ -5,3 +5,4 @@ export {default as Modify} from './Modify';
 export {default as ForgetByEmail} from './ForgetByEmail';
 export {default as ResetPassword} from './ResetPassword';
 export {default as LoginOuterContainer} from './LoginOuterContainer';
+export {default} from './Account';

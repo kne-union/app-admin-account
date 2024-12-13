@@ -1,7 +1,7 @@
 import style from './style.module.scss';
 import {Checkbox, Col, Row, Space, Button} from 'antd';
 import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import useNavigate from '@common/useNavigate';
 import {createWithRemoteLoader} from '@kne/remote-loader';
 import {LOGIN_REMEMBER_ACCOUNT} from '@common/systemConstant';
 import commonStyle from '../style.module.scss';

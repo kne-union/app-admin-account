@@ -8,8 +8,6 @@ const userAccount = ({DataTypes}) => {
             }, belongToUserId: {
                 type: DataTypes.BIGINT.UNSIGNED, comment: '账号所属的userId，用来追踪用户之前设置的密码记录'
             }
-        }, associate: ({userAccount, user}) => {
-            userAccount.belongsTo(user, {foreignKey: 'belongToUserId'});
         }
     };
 };

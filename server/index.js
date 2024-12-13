@@ -10,7 +10,7 @@ const {Unauthorized, Forbidden} = httpErrors;
 
 const adminAccount = fp(async function (fastify, options) {
     options = merge({
-        prefix: `/api/v${appInfo.apiVersion}/account`, dbTableNamePrefix: 't_account_', isTest: false, jwt: {
+        prefix: `/api/${appInfo.name}/v${appInfo.apiVersion}`, dbTableNamePrefix: 't_account_', isTest: false, jwt: {
             secret: 'super-secret', expires: null
         }, defaultPassword: 'Aa000000!', sendMessage: async () => {
         }
@@ -30,7 +30,7 @@ const adminAccount = fp(async function (fastify, options) {
                     throw Unauthorized('身份认证超时');
                 }
                 request.authenticatePayload = info.payload;
-                request.userInfo = await services.user.getUserInfo(request.authenticatePayload);
+                request.userInfo = await services.user.getUser(request.authenticatePayload);
                 request.appName = request.headers['x-app-name'];
             }, tenant: async (request) => {
                 const {services} = fastify[appInfo.name];

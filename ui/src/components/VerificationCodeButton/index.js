@@ -8,6 +8,7 @@ const VerificationCodeButton = createWithRemoteLoader({
     const [LoadingButton, useFormContext, formUtils] = remoteModules;
     const {formState} = useFormContext();
     const targetField = formUtils.getField(formState, {name: target});
+
     const [time, setTime] = useState(0);
     const setCountdown = time => {
         setTime(time);

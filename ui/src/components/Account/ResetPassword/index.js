@@ -1,7 +1,7 @@
 import Modify from '../Modify';
 import commonStyle from '../style.module.scss';
 import {Button} from 'antd';
-import {useNavigate} from 'react-router-dom';
+import useNavigate from '@common/useNavigate';
 import {LeftOutlined} from '@ant-design/icons';
 
 const ResetPassword = (p) => {

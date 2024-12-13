@@ -13,8 +13,8 @@ const user = ({DataTypes}) => {
                 type: DataTypes.BIGINT.UNSIGNED, allowNull: false, comment: '当前账号id'
             }, status: {
                 type: DataTypes.INTEGER.UNSIGNED, defaultValue: 0, comment: '0:正常,10:初始化未激活，需要用户设置密码后使用,11:已禁用,12:已关闭'
-            }, currentTenantId: {
-                type: DataTypes.BIGINT.UNSIGNED, comment: '当前租户id'
+            }, currentTenantUuid: {
+                type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, comment: '当前租户uuid'
             }, avatar: {
                 type: DataTypes.STRING, comment: '头像fileId'
             }, gender: {

@@ -13,12 +13,10 @@ const App = ({globalPreset}) => {
     return (<Routes>
         <Route path="account"
                element={<BeforeLoginLayout preset={globalPreset} themeToken={globalPreset.themeToken}/>}>
-            <Route path="*" element={<Account baseUrl="/account" loginTitle="测试系统登录"
-                                              isTenant={searchParams.get('isTenant') === 'true'}/>}/>
+            <Route path="*" element={<Account baseUrl="/account" loginTitle="测试系统登录" isTenant={searchParams.get('isTenant') === 'true'}/>}/>
         </Route>
         <Route path="admin/initAdmin"
-               element={<AfterUserLoginLayout preset={globalPreset} themeToken={globalPreset.themeToken}
-                                              paths={[]}/>}>
+               element={<AfterUserLoginLayout preset={globalPreset} themeToken={globalPreset.themeToken} paths={[]}/>}>
             <Route index element={<InitAdmin baseUrl="/admin"/>}/>
         </Route>
         <Route

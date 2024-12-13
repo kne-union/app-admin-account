@@ -1,6 +1,6 @@
 import commonStyle from '../style.module.scss';
 import {createWithRemoteLoader} from '@kne/remote-loader';
-import {useNavigate} from 'react-router-dom';
+import useNavigate from '@common/useNavigate';
 import classnames from 'classnames';
 import {LeftOutlined} from '@ant-design/icons';
 import {Space, Button} from 'antd';

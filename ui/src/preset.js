@@ -24,7 +24,6 @@ export const ajax = (() => {
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
-        config.headers['X-APP-NAME'] = 'Account';
         return config;
     });
 

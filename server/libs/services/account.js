@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin';
 import appInfo from "../appInfo.js";
 import crypto from "node:crypto";
+import bcrypt from 'bcryptjs';
 import dayjs from 'dayjs';
 
 const generateRandom6DigitNumber = () => {

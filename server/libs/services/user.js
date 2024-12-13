@@ -11,7 +11,21 @@ const {Unauthorized} = httpErrors;
 const userService = fp(async (fastify, options) => {
     const {models, services} = fastify[appInfo.name];
 
-    const getUserInfo = async (authenticatePayload) => {
+    const getUserInstance = async ({uuid}) => {
+        const user = await models.user.findOne({
+            where: {
+                uuid
+            }
+        });
+
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+
+        return user;
+    };
+
+    const getUser = async (authenticatePayload) => {
         if (!(authenticatePayload && authenticatePayload.id)) {
             throw new Unauthorized();
         }
@@ -53,14 +67,21 @@ const userService = fp(async (fastify, options) => {
         }
         const account = await models.userAccount.create(await services.account.passwordEncryption(password));
         const user = await models.user.create({
-            avatar, nickname, gender, birthday, description, phone, email, status, userAccountId: account.uuid
+            avatar, nickname, gender, birthday, description, phone, email, status, userAccountId: account.id
         });
-        await account.update({belongToUserId: user.uuid});
+        await account.update({belongToUserId: user.id});
 
         return Object.assign({}, user.get({pain: true}), {id: user.uuid});
     };
 
-    services.user = {getUserInfo, addUser, accountIsExists};
+    const setCurrentTenantUUId = async ({id, tenantId}) => {
+        const tenant = await services.tenant.getTenantInstance({uuid: tenantId});
+        const user = await getUserInstance({uuid: id});
+        user.currentTenantUuid = tenant.uuid;
+        await user.save();
+    };
+
+    services.user = {getUser, addUser, accountIsExists, setCurrentTenantUUId};
 });
 
 export default userService;

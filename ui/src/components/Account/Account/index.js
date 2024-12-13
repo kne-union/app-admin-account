@@ -2,6 +2,11 @@ import {Navigate, Outlet, Route, Routes} from 'react-router-dom';
 import classnames from 'classnames';
 import {merge} from 'lodash-es';
 import {Provider} from '@common/context';
+import Login from './Login';
+import Register from './Register';
+import Forget from './Forget';
+import ResetPassword from './ResetPassword';
+import Modify from './Modify';
 import style from './style.module.scss';
 
 const Layout = () => {
@@ -16,20 +21,35 @@ const Layout = () => {
 
 const Account = ({className, ...p}) => {
     const {baseUrl, ...props} = merge({}, {
-        baseUrl: '/', isTenant: false, storeKeys: {
+        baseUrl: '/',
+        accountType: 'email',
+        loginTitle: '登录',
+        registerTitle: '注册',
+        loginPath: 'login',
+        registerPath: 'register',
+        forgetPath: 'forget',
+        resetPasswordPath: 'reset-password',
+        modifyPath: 'modify',
+        isTenant: false,
+        storeKeys: {
             token: 'X-User-Token'
         }
     }, p);
-    return <Provider value={{baseUrl, ...props}}>
+    return <Provider value={{
+        baseUrl, ...props,
+        loginUrl: `${baseUrl}/${props.loginPath}`,
+        registerUrl: `${baseUrl}/${props.registerPath}`,
+        forgetUrl: `${baseUrl}/${props.forgetPath}`
+    }}>
         <div className={className}>
             <Routes>
                 <Route element={<Layout/>}>
-                    <Route index element={<Navigate to={`${baseUrl}/login`}/>}/>
-                    <Route path="login" element={<Login/>}/>
-                    <Route path="register" element={<Register/>}/>
-                    {/*<Route path="forget" element={<Forget/>}/>
-                    <Route path="reset-password/:token" element={<ResetPassword/>}/>
-                    <Route path="modify/:email" element={<Modify/>}/>*/}
+                    <Route index element={<Navigate to={props.loginUrl}/>}/>
+                    <Route path={props.loginPath} element={<Login/>}/>
+                    <Route path={props.registerPath} element={<Register/>}/>
+                    <Route path={props.forgetPath} element={<Forget/>}/>
+                    <Route path={`${props.resetPasswordPath}/:token`} element={<ResetPassword/>}/>
+                    <Route path={`${props.modifyPath}modify/:account`} element={<Modify/>}/>
                 </Route>
             </Routes>
         </div>
