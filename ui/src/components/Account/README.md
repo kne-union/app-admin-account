@@ -97,6 +97,60 @@ render(<BaseExample/>);
 
 ```
 
+- Modify
+- 修改密码
+- _Account(@components/Account),antd(antd)
+
+```jsx
+const {Modify} = _Account;
+const {Flex} = antd;
+const BaseExample = () => {
+    return <Flex vertical gap={8}>
+        <Modify account="test@test.com"/>
+        <Modify type="phone" account="+81 17029292828"/>
+    </Flex>;
+};
+
+render(<BaseExample/>);
+
+```
+
+- ForgetByEmail
+- 忘记密码（邮箱）
+- _Account(@components/Account),antd(antd)
+
+```jsx
+const {LoginOuterContainer, ForgetByEmail} = _Account;
+const BaseExample = () => {
+    return <LoginOuterContainer>
+        <ForgetByEmail onSubmit={(data, callback) => {
+            callback();
+        }}/>
+    </LoginOuterContainer>;
+};
+
+render(<BaseExample/>);
+
+```
+
+- ResetPassword
+- 重置密码
+- _Account(@components/Account),antd(antd)
+
+```jsx
+const {ResetPassword} = _Account;
+const {Flex} = antd;
+const BaseExample = () => {
+    return <Flex vertical gap={8}>
+        <ResetPassword account="test@test.com"/>
+        <ResetPassword type="phone" account="+81 17029292828"/>
+    </Flex>;
+};
+
+render(<BaseExample/>);
+
+```
+
 
 ### API
 
