@@ -161,8 +161,11 @@ const accountController = fp(async (fastify, options) => {
     fastify.post(`${options.prefix}/account/login`, {
         schema: {
             tags: ['账号'], summary: '登录', body: {
-                type: 'object', required: ['username', 'password'], properties: {
-                    username: {type: 'string', description: '用户名'}, password: {type: 'string', description: '密码'}
+                type: 'object', required: ['password'], properties: {
+                    type: {type: 'string', default: 'email', description: '登录类型'},
+                    email: {type: 'string', description: '邮箱'},
+                    phone: {type: 'string', description: '手机号'},
+                    password: {type: 'string', description: '密码'}
                 }
             }, response: {
                 200: {
@@ -180,9 +183,8 @@ const accountController = fp(async (fastify, options) => {
             }
         }
     }, async request => {
-        const {username, password} = request.body;
         const appName = request.headers['x-app-name'];
-        const {token, user} = await services.account.login({username, password, ip: request.ip, appName});
+        const {token, user} = await services.account.login(Object.assign({}, request.body, {appName}));
         return {token, currentTenantId: user.currentTenantId};
     });
 

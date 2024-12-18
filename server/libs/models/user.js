@@ -1,4 +1,4 @@
-const user = ({DataTypes}) => {
+const user = ({DataTypes, definePrimaryType}) => {
     return {
         model: {
             uuid: {
@@ -9,9 +9,9 @@ const user = ({DataTypes}) => {
                 type: DataTypes.STRING, comment: '用户邮箱'
             }, phone: {
                 type: DataTypes.STRING, comment: '用户手机号'
-            }, userAccountId: {
-                type: DataTypes.BIGINT.UNSIGNED, allowNull: false, comment: '当前账号id'
-            }, status: {
+            }, userAccountId: definePrimaryType('userAccountId', {
+                allowNull: false, comment: '当前账号id'
+            }), status: {
                 type: DataTypes.INTEGER.UNSIGNED, defaultValue: 0, comment: '0:正常,10:初始化未激活，需要用户设置密码后使用,11:已禁用,12:已关闭'
             }, currentTenantUuid: {
                 type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, comment: '当前租户uuid'
@@ -35,15 +35,9 @@ const user = ({DataTypes}) => {
                 unique: true, fields: ['phone', 'deleted_at']
             }]
         }, associate: ({user, tenant, tenantUser}) => {
-            /*user.hasOne(adminRole, {foreignKey: 'userId', sourceKey: 'uuid', constraints: false});
             user.belongsToMany(tenant, {
-                through: {model: tenantUser, unique: false},
-                otherKey: 'tenantId',
-                foreignKey: 'userId',
-                targetKey: 'uuid',
-                sourceKey: 'uuid',
-                constraints: false
-            });*/
+                through: {model: tenantUser, unique: false}, otherKey: 'tenantId', foreignKey: 'userId'
+            });
         }
     };
 };

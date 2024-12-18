@@ -11,11 +11,9 @@ const {Unauthorized} = httpErrors;
 const userService = fp(async (fastify, options) => {
     const {models, services} = fastify[appInfo.name];
 
-    const getUserInstance = async ({uuid}) => {
-        const user = await models.user.findOne({
-            where: {
-                uuid
-            }
+    const getUserInstance = async ({id, uuid}) => {
+        const user = id ? await models.user.findByPk(id) : await models.user.findOne({
+            where: {uuid}
         });
 
         if (!user) {
@@ -81,7 +79,71 @@ const userService = fp(async (fastify, options) => {
         await user.save();
     };
 
-    services.user = {getUser, addUser, accountIsExists, setCurrentTenantUUId};
+    const getUserList = async ({filter, perPage, currentPage}) => {
+        const queryFilter = {};
+
+        ['nickname'].forEach(key => {
+            if (filter && filter[key]) {
+                queryFilter[key] = {
+                    [Op.like]: `%${filter[key]}%`
+                };
+            }
+        });
+        const {count, rows} = await models.user.findAndCountAll({
+            include: [{
+                model: models.tenant
+            }], where: queryFilter, offset: perPage * (currentPage - 1), limit: perPage
+        });
+        return {
+            pageData: rows.map(item => {
+                return Object.assign({}, item.get({pain: true}), {
+                    id: item.uuid, tenants: item.tenants.map(({uuid, name}) => {
+                        return {id: uuid, name};
+                    })
+                });
+            }), totalCount: count
+        };
+    };
+
+    const saveUser = async ({id, ...otherInfo}) => {
+        const user = await getUserInstance({uuid: id});
+
+        if ((await accountIsExists({phone: otherInfo.phone, email: otherInfo.email}, user)) > 0) {
+            throw new Error('手机号或者邮箱都不能重复');
+        }
+
+        ['nickname', 'avatar', 'phone', 'email', 'description'].forEach(fieldName => {
+            if (otherInfo[fieldName]) {
+                user[fieldName] = otherInfo[fieldName];
+            }
+        });
+
+        await user.save();
+    };
+
+    const setSuperAdmin = async ({userId, status}) => {
+        const user = await services.user.getUserInstance({uuid: userId});
+        user.isSuperAdmin = status;
+        await user.save();
+    }
+
+    const setUserStatus = async ({userId, status}) => {
+        const user = await services.user.getUserInstance({uuid: userId});
+        user.status = status;
+        await user.save();
+    };
+
+    services.user = {
+        getUserInstance,
+        getUser,
+        addUser,
+        saveUser,
+        accountIsExists,
+        setCurrentTenantUUId,
+        getUserList,
+        setSuperAdmin,
+        setUserStatus
+    };
 });
 
 export default userService;

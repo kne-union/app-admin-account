@@ -1,5 +1,6 @@
 import {createWithRemoteLoader} from '@kne/remote-loader';
 import {Navigate, useLocation} from 'react-router-dom';
+import {APP_NAME} from '@common/systemConstant';
 import Fetch from '@kne/react-fetch';
 import {get} from 'lodash-es';
 import {useEffect} from 'react';
@@ -32,7 +33,7 @@ export const UserInfo = createWithRemoteLoader({
     const [SetGlobal, usePreset] = remoteModules;
     const {apis} = usePreset();
     return (<Fetch
-        {...Object.assign({}, apis.adminAccount.account.getUserInfo)}
+        {...Object.assign({}, apis[APP_NAME].account.getUserInfo)}
         render={({data}) => {
             return (<CheckAccountIsInit baseUrl={baseUrl} data={data}>
                 <SetGlobal globalKey="userInfo" value={data} needReady>
@@ -50,7 +51,7 @@ export const SuperAdminInfo = createWithRemoteLoader({
     const {apis} = usePreset();
     return (<Fetch
         cache="super-admin-info"
-        {...Object.assign({}, apis.account.getSuperAdminInfo)}
+        {...Object.assign({}, apis[APP_NAME].admin.getSuperAdminInfo)}
         render={({data}) => {
             return (<SetGlobal globalKey="userInfo" value={data} needReady>
                 {children}
@@ -65,7 +66,7 @@ export const TenantUserInfo = createWithRemoteLoader({
     const [SetGlobal, usePreset] = remoteModules;
     const {apis} = usePreset();
     return (<Fetch
-        {...Object.assign({}, apis.account.getTenantUserInfo)}
+        {...Object.assign({}, apis[APP_NAME].account.getTenantUserInfo)}
         render={({data, reload}) => {
             return (<CheckAccountIsInit baseUrl={baseUrl} data={Object.assign({}, data, {reload})}>
                 <SetGlobal globalKey="userInfo" value={Object.assign({}, data, {reload})} needReady>

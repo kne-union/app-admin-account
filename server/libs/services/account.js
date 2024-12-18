@@ -21,7 +21,7 @@ const md5 = value => {
 
 const accountService = fp(async (fastify, options) => {
     const {models, services} = fastify[appInfo.name];
-
+    const {Op} = fastify.sequelize.Sequelize;
     const verificationCodeValidate = async ({name, type, code}) => {
         const verificationCode = await models.verificationCode.findOne({
             where: {
@@ -91,6 +91,17 @@ const accountService = fp(async (fastify, options) => {
         };
     };
 
+    const passwordAuthentication = async ({accountId, password}) => {
+        const userAccount = await models.userAccount.findByPk(accountId);
+        if (!userAccount) {
+            throw new Error('账号不存在');
+        }
+        const generatedHash = await bcrypt.hash(password + userAccount.salt, userAccount.salt);
+        if (userAccount.password !== generatedHash) {
+            throw new Error('用户名或密码错误');
+        }
+    };
+
     const register = async ({
                                 avatar,
                                 nickname,
@@ -113,6 +124,49 @@ const accountService = fp(async (fastify, options) => {
             avatar, nickname, gender, birthday, description, phone, email, password, status
         });
     };
+
+    const login = async ({type, email, phone, password, appName}) => {
+        const query = {
+            status: {
+                [Op.or]: [0, 1]
+            }
+        };
+        (() => {
+            if (type === 'email') {
+                query.email = email;
+                return;
+            }
+            if (type === 'phone') {
+                query.phone = phone;
+                return;
+            }
+
+            throw new Error('不支持的登录类型');
+        })();
+        const user = await models.user.findOne({
+            where: query
+        });
+
+        if (!user) {
+            throw new Error('用户名或密码错误');
+        }
+
+        await passwordAuthentication({accountId: user.userAccountId, password});
+
+        return {
+            token: fastify.jwt.sign({payload: {id: user.uuid}}),
+            user: Object.assign({}, user.get({plain: true}), {id: user.uuid})
+        };
+    };
+
+    const resetPassword = async ({password, userId}) => {
+        const user = await services.user.getUserInstance({uuid: userId});
+        const account = await models.userAccount.create(Object.assign({}, await passwordEncryption(password), {
+            belongToUserId: user.id
+        }));
+        await user.update({userAccountId: account.id});
+    };
+
     services.account = {
         generateRandom6DigitNumber,
         sendVerificationCode,
@@ -121,8 +175,10 @@ const accountService = fp(async (fastify, options) => {
         verificationJWTCodeValidate,
         passwordEncryption,
         register,
+        login,
         userNameIsEmail,
-        md5
+        md5,
+        resetPassword
     };
 });
 

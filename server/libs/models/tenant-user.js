@@ -20,9 +20,11 @@ const tenantUser = ({DataTypes}) => {
             indexes: [{
                 unique: true, fields: ['uuid', 'deleted_at']
             }]
-        }, associate: ({user, tenant, tenantUser}) => {
+        }, associate: ({user, tenant, tenantUser, tenantRole, tenantUserRole, tenantOrg, tenantUserOrg}) => {
             tenantUser.belongsTo(tenant);
             tenantUser.belongsTo(user);
+            tenantUser.belongsToMany(tenantRole, {through: tenantUserRole});
+            tenantUser.belongsToMany(tenantOrg, {through: tenantUserOrg});
         }
     };
 };

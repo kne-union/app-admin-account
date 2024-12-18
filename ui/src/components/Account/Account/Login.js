@@ -13,7 +13,7 @@ const Login = createWithRemoteLoader({
     modules: ['components-core:Global@usePreset']
 })(({remoteModules}) => {
     const [usePreset] = remoteModules;
-    const {baseUrl, isTenant, apis, loginTitle, registerUrl, forgetUrl} = useProps();
+    const {baseUrl, isTenant, apis, loginTitle, registerUrl, forgetUrl, accountType} = useProps();
     const navigate = useNavigate();
     const refererRef = useRef(baseUrl);
     const [tenantList, setTenantList] = useState([]);
@@ -49,7 +49,7 @@ const Login = createWithRemoteLoader({
             return (<LoginComponent
                 title={loginTitle} registerUrl={registerUrl} forgetUrl={forgetUrl}
                 onSubmit={async formData => {
-                    await login(Object.assign({}, formData, {isTenant}), ({tenantList, referer}) => {
+                    await login(Object.assign({}, formData, {isTenant, type: accountType}), ({tenantList, referer}) => {
                         refererRef.current = referer;
                         isTenant && setTenantList(tenantList);
                     });

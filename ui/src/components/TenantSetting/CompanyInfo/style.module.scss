@@ -1,0 +1,70 @@
+.company-info {
+  padding: 16px 32px;
+}
+
+.label {
+  text-align: right;
+  color: var(--font-color-grey);
+}
+
+.value {
+  margin-right: 19px;
+
+  &:hover {
+    .edit {
+      visibility: visible;
+    }
+  }
+}
+
+.edit {
+  cursor: pointer;
+  display: block;
+  visibility: hidden;
+  padding: 5px;
+}
+
+.logo-wrap {
+  cursor: pointer;
+  position: relative;
+  height: 36px;
+  overflow: hidden;
+
+  :global {
+    .ant-avatar {
+      width: 100% !important;
+      height: 36px !important;
+
+      img {
+        height: 36px !important;
+        width: auto;
+        margin: auto;
+      }
+    }
+
+    .avatar-preview {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+
+  .logo-edit-mask {
+    display: none;
+  }
+
+  &:hover {
+    .logo-edit-mask {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: var(--font-color-grey);
+      color: #fff;
+      pointer-events: none;
+    }
+  }
+}

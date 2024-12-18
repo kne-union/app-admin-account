@@ -2,6 +2,7 @@ import {createWithRemoteLoader} from '@kne/remote-loader';
 import {Button, Col, Divider, List, Popover, Row, Space, App} from 'antd';
 import Fetch from '@kne/react-fetch';
 import classnames from 'classnames';
+import {APP_NAME} from '@common/systemConstant';
 import {forwardRef, useImperativeHandle, useState} from 'react';
 import {removeCookies} from '@common/cookies';
 import style from './style.module.scss';
@@ -72,13 +73,13 @@ const UserTool = createWithRemoteLoader({
                         onClick={() => {
                             modal({
                                 title: '切换租户', size: 'small', onConfirm: async (e, {childrenRef}) => {
-                                    const {data: resData} = await ajax(Object.assign({}, apis.account.setCurrentTenantId, {
+                                    const {data: resData} = await ajax(Object.assign({}, apis[APP_NAME].account.setCurrentTenantId, {
                                         data: {tenantId: childrenRef.current}
                                     }));
                                     if (resData.code !== 0) {
                                         return false;
                                     }
-                                    const {data: userResData} = await ajax(Object.assign({}, apis.account.getTenantUserInfo));
+                                    const {data: userResData} = await ajax(Object.assign({}, apis[APP_NAME].account.getTenantUserInfo));
                                     if (userResData.code !== 0) {
                                         return false;
                                     }
@@ -86,7 +87,7 @@ const UserTool = createWithRemoteLoader({
                                     message.success('切换租户成功');
                                     window.location.reload();
                                 }, children: ({childrenRef}) => (<Fetch
-                                    {...Object.assign({}, apis.account.getUserTenant)}
+                                    {...Object.assign({}, apis[APP_NAME].account.getUserTenant)}
                                     render={({data}) => {
                                         const {tenantList, userInfo} = data;
                                         return <TenantList tenantList={tenantList} ref={childrenRef}
@@ -109,7 +110,7 @@ const UserTool = createWithRemoteLoader({
                         Object.values(storeKeys).forEach(tokenKey => {
                             removeCookies(tokenKey, domain);
                         });
-                        ajax(Object.assign({}, apis.account.getUserInfo));
+                        ajax(Object.assign({}, apis[APP_NAME].account.getUserInfo));
                     }}
                 >
                     <Space>

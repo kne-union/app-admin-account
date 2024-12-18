@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import path from 'node:path';
-import {merge} from 'lodash-es';
+import {merge, get} from 'lodash-es';
 import jwt from '@fastify/jwt';
 import namespace from "@kne/fastify-namespace";
 import httpErrors from 'http-errors';
@@ -36,6 +36,9 @@ const adminAccount = fp(async function (fastify, options) {
                 const {services} = fastify[appInfo.name];
             }, admin: async (request) => {
                 const {services} = fastify[appInfo.name];
+                if (!await services.admin.checkIsSuperAdmin(request.userInfo)) {
+                    throw Unauthorized('不能执行该操作，需要超级管理员权限');
+                }
             }, createPermission: permission => async request => {
                 const permissions = get(request.tenantInfo, 'tenantUser.permissions');
                 if (!permissions) {

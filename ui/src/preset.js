@@ -59,7 +59,7 @@ const registry = {
 };
 
 const componentsCoreRemote = {
-    ...registry, remote: 'components-core', defaultVersion: '0.2.77'
+    ...registry, remote: 'components-core', defaultVersion: '0.2.84'
 };
 export const globalInit = async () => {
     fetchPreset({

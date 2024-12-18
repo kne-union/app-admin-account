@@ -5,3 +5,5 @@ const TenantSetting = () => {
 };
 
 export default TenantSetting;
+
+export {default as CompanyInfo} from './CompanyInfo';
